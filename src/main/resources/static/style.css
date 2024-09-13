@@ -1,0 +1,12 @@
+#messages {
+    /*display: flex;*/
+}
+
+.message {
+    /*flex-direction: row;*/
+    /*flex-wrap: wrap;*/
+}
+.form-msg {
+    position: fixed;
+    bottom: 0;
+}
