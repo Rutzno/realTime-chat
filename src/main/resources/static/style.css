@@ -1,12 +1,39 @@
 #messages {
     /*display: flex;*/
+    /*flex-direction: column;*/
+    height: 80vh;
+    overflow-y: auto;
 }
 
 .message {
-    /*flex-direction: row;*/
-    /*flex-wrap: wrap;*/
+    min-height: 30px;
+    margin-left: 20px;
+    margin-right: 20px;
 }
-.form-msg {
-    position: fixed;
-    bottom: 0;
+#form-msg {
+    display: flex;
+    flex-direction: row;
+    background-color: aliceblue;
+}
+
+#input-msg {
+    flex-grow: 1;
+    border: none;
+    background: inherit;
+    font-size: 16px;
+    padding-left: 20px;
+}
+#input-msg:focus {
+    outline: none;
+}
+
+#send-msg-btn {
+    border: none;
+    background: inherit;
+    padding: 10px;
+    cursor: pointer;
+}
+#send-msg-btn img {
+    width: 25px;
+    height: 25px;
 }
