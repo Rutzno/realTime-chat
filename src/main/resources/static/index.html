@@ -9,17 +9,21 @@
 <div id="username-page">
     <form>
         <input type="text" id="input-username" placeholder="Enter username...">
-        <button type="button" id="send-username-btn">Send</button>
+        <button type="button" id="send-username-btn" class="primary">Send</button>
     </form>
 </div>
 <div id="chat-page" class="hidden">
-    <div id="users">
-        <!--<div class="user">User0</div>
-        <div class="user">User1</div>
-        <div class="user">User2</div>-->
+    <div class="left-section">
+        <div id="users">
+            <!--<button class="user">User0</button>
+            <button class="user primary">User1</button>
+            <button class="user">User2</button>-->
+        </div>
+        <button id="public-chat-btn" class="primary">Public chat</button>
     </div>
     <div id="chat-section">
         <div class="connecting">Connecting...</div>
+        <div id="chat-with">Public chat</div>
         <div id="messages">
             <!--<div class="message-container">
                 <div class="message-header">
@@ -29,14 +33,12 @@
                 <div class="message">Test message 1. Lorem ipsum dolor sit amet, consectetur adipisicing elit.</div>
             </div>-->
         </div>
-        <form>
-            <div id="form-msg">
-                <input type="text" id="input-msg" placeholder="Type a message" class="form-item"/>
-                <button type="button" id="send-msg-btn" class="form-item">
-                    <img src="sendMsgIcon.png" alt="send-message-icon">
-                </button>
-            </div>
-        </form>
+        <div id="form-msg">
+            <input type="text" id="input-msg" placeholder="Type a message" class="form-item"/>
+            <button type="button" id="send-msg-btn" class="form-item">
+                <img src="sendMsgIcon.png" alt="send-message-icon">
+            </button>
+        </div>
     </div>
 </div>
 
