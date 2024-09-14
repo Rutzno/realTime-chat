@@ -13,24 +13,31 @@
     </form>
 </div>
 <div id="chat-page" class="hidden">
-    <div class="connecting">Connecting...</div>
-    <div id="messages">
-        <!--<div class="message-container">
-            <div class="message-header">
-                <div class="sender">User0</div>
-                <div class="date">11:29 PM | sept. 07</div>
-            </div>
-            <div class="message">Test message 1. Lorem ipsum dolor sit amet, consectetur adipisicing elit.</div>
-        </div>-->
+    <div id="users">
+        <!--<div class="user">User0</div>
+        <div class="user">User1</div>
+        <div class="user">User2</div>-->
     </div>
-    <form>
-        <div id="form-msg">
-            <input type="text" id="input-msg" placeholder="Type a message" class="form-item"/>
-            <button type="button" id="send-msg-btn" class="form-item">
-                <img src="sendMsgIcon.png" alt="send-message-icon">
-            </button>
+    <div id="chat-section">
+        <div class="connecting">Connecting...</div>
+        <div id="messages">
+            <!--<div class="message-container">
+                <div class="message-header">
+                    <div class="sender">User0</div>
+                    <div class="date">11:29 PM | sept. 07</div>
+                </div>
+                <div class="message">Test message 1. Lorem ipsum dolor sit amet, consectetur adipisicing elit.</div>
+            </div>-->
         </div>
-    </form>
+        <form>
+            <div id="form-msg">
+                <input type="text" id="input-msg" placeholder="Type a message" class="form-item"/>
+                <button type="button" id="send-msg-btn" class="form-item">
+                    <img src="sendMsgIcon.png" alt="send-message-icon">
+                </button>
+            </div>
+        </form>
+    </div>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.0/sockjs.js"></script>
