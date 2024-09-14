@@ -1,3 +1,6 @@
+#username-page {
+    text-align: center;
+}
 #messages {
     /*display: flex;*/
     /*flex-direction: column;*/
@@ -5,10 +8,9 @@
     overflow-y: auto;
 }
 
-.message {
+.message-container {
     min-height: 30px;
-    margin-left: 20px;
-    margin-right: 20px;
+    margin: 20px;
 }
 .hidden {
     display: none;
@@ -39,4 +41,22 @@
 #send-msg-btn img {
     width: 25px;
     height: 25px;
+}
+
+.message-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+.sender {
+    font-size: 18px;
+    color: dodgerblue;
+}
+.date {
+    color: #ccc;
+    font-size: 14px;
+}
+.message {
+    font-size: 18px;
 }
