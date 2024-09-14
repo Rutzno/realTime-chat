@@ -7,7 +7,7 @@ import java.time.format.DateTimeFormatter;
 /**
  * @author Mack_TB
  * @since 01/09/2024
- * @version 1.0.4
+ * @version 1.0.5
  */
 
 public class ChatMessage {
@@ -50,5 +50,10 @@ public class ChatMessage {
         LocalDateTime formattedDate = ZonedDateTime.parse(createdAt).toLocalDateTime();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("hh:mm a | MMM dd");
         this.createdAt = formattedDate.format(formatter);
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("hh:mm a | MMM dd");
+        this.createdAt = createdAt.format(formatter);
     }
 }
