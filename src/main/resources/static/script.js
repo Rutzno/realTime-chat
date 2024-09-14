@@ -1,19 +1,23 @@
 /**
  * @author Mack_TB
  * @since 01/09/2024
- * @version 1.0.5
+ * @version 1.0.6
  */
 
 let usernamePage = document.getElementById("username-page")
 let sendUsernameBtn = document.getElementById("send-username-btn")
+let chatWith = document.getElementById("chat-with")
 let container = document.getElementById("messages")
 let users = document.getElementById("users")
+let userButtons = users.getElementsByClassName("user");
+let publicChatBtn = document.getElementById("public-chat-btn")
 let chatPage = document.getElementById("chat-page")
 let inputMsg = document.getElementById("input-msg")
 let sendMsgBtn = document.getElementById("send-msg-btn")
 let connectingElement = document.querySelector(".connecting")
 let stompClient = null
 let username = null
+let currentChat = "Public chat"
 
 function connect() {
     username = document.getElementById("input-username").value.trim()
@@ -57,7 +61,9 @@ function onMessageReceived(payload) {
             removeUserByName(message.sender)
             break
         case "CHAT":
-            createMessageNode(message)
+            if (chatWith.textContent === "Public chat") {
+                createMessageNode(message)
+            }
             break
     }
 }
@@ -92,23 +98,28 @@ function createMessageNode(message) {
 }
 
 function createUserNode(user) {
-    let userTag = document.createElement("div")
-    userTag.classList.add("user")
-    userTag.textContent = user
-    users.appendChild(userTag)
-    let hrTag = document.createElement("hr")
-    userTag.appendChild(hrTag)
+    let userButton = document.createElement("button")
+    userButton.classList.add("user")
+    userButton.textContent = user
+    users.appendChild(userButton)
+    /*let hrTag = document.createElement("hr")
+    userTag.appendChild(hrTag)*/
+    userButton.addEventListener("click", () => handleUserButton(user))
 }
 
 function removeUserByName(userName) {
-    let usersTag = users.getElementsByClassName("user");
-
-    for (let i = 0; i < usersTag.length; i++) {
-        if (usersTag[i].textContent === userName) {
-            usersTag[i].remove();  // Remove the user with matching text content
+    for (let i = 0; i < userButtons.length; i++) {
+        if (userButtons[i].textContent === userName) {
+            userButtons[i].remove();  // Remove the user with matching text content
             break;  // Stop once the user is found and removed
         }
     }
+}
+
+function handleUserButton(username) {
+    publicChatBtn.classList.remove("primary")
+    chatWith.textContent = username
+    container.replaceChildren()
 }
 
 function sendMessage() {
@@ -148,3 +159,8 @@ function fetchOnlineUsers() {
 
 sendUsernameBtn.addEventListener("click", connect)
 sendMsgBtn.addEventListener("click",  sendMessage)
+publicChatBtn.addEventListener("click", () => {
+    publicChatBtn.classList.add("primary")
+    chatWith.textContent = "Public chat"
+    fetchOldMessages()
+})
