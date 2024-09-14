@@ -5,6 +5,9 @@
     width: 270px;
     height: 85vh;
     overflow-y: scroll;
+    display: flex;
+    flex-direction: column;
+    background-color: white;
 }
 
 #chat-page {
@@ -33,6 +36,8 @@
     display: flex;
     flex-direction: row;
     background-color: aliceblue;
+    position: fixed;
+    bottom: 0;
 }
 
 #input-msg {
@@ -73,4 +78,41 @@
 }
 .message {
     font-size: 18px;
+}
+
+.primary {
+    background-color: #0d6efd;
+    color: white;
+}
+#public-chat-btn {
+    width: 270px;
+    height: 40px;
+    /*border-color: #0d6efd;*/
+    position: fixed;
+    bottom: 0;
+    cursor: pointer;
+}
+
+.user {
+    height: 40px;
+    cursor: pointer;
+}
+.user:hover {
+    background-color: #0056b3;
+}
+.user:focus {
+    background-color: #0d6efd;
+    color: white;
+}
+
+button {
+    background-color: white;
+    border: none;
+    text-align: left;
+    padding-left: 30px;
+}
+#chat-with {
+    height: 30px;
+    text-align: center;
+    background-color: #ccc;
 }
