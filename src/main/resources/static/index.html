@@ -6,11 +6,22 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<div>
+<div id="username-page">
+    <form>
+        <input type="text" id="input-username" placeholder="Enter username...">
+        <button type="button" id="send-username-btn">Send</button>
+    </form>
+</div>
+<div id="chat-page" class="hidden">
     <div class="connecting">Connecting...</div>
     <div id="messages">
-        <!--<div class="message">Test message 1. Lorem ipsum dolor sit amet, consectetur adipisicing elit.</div>
-            <hr>        -->
+        <!--<div class="message-container">
+            <div class="message-header">
+                <div class="sender">User0</div>
+                <div class="date">11:29 PM | sept. 07</div>
+            </div>
+            <div class="message">Test message 1. Lorem ipsum dolor sit amet, consectetur adipisicing elit.</div>
+        </div>-->
     </div>
     <form>
         <div id="form-msg">
