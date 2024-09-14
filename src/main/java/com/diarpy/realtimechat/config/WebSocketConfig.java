@@ -9,7 +9,7 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 /**
  * @author Mack_TB
  * @since 01/09/2024
- * @version 1.0.3
+ * @version 1.0.4
  */
 
 @Configuration
@@ -23,7 +23,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
-        registry.setApplicationDestinationPrefixes("/app");
-        registry.enableSimpleBroker("/topic");
+        registry.setApplicationDestinationPrefixes("/app"); // Prefix for sending messages
+        registry.enableSimpleBroker("/topic"); // Prefix for receiving messages
     }
 }
