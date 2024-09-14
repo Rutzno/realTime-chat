@@ -1,11 +1,13 @@
 /**
  * @author Mack_TB
  * @since 01/09/2024
- * @version 1.0.4
+ * @version 1.0.5
  */
 
 let usernamePage = document.getElementById("username-page")
 let sendUsernameBtn = document.getElementById("send-username-btn")
+let container = document.getElementById("messages")
+let users = document.getElementById("users")
 let chatPage = document.getElementById("chat-page")
 let inputMsg = document.getElementById("input-msg")
 let sendMsgBtn = document.getElementById("send-msg-btn")
@@ -32,6 +34,7 @@ function onConnected() {
     stompClient.send("/app/chat.addUser", {},
         JSON.stringify({sender: username, type: "JOIN", createdAt: new Date()}))
     fetchOldMessages()
+    fetchOnlineUsers()
 
     connectingElement.classList.add("hidden")
 }
@@ -44,38 +47,67 @@ function onError() {
 
 function onMessageReceived(payload) {
     let message = JSON.parse(payload.body)
-    createNode(message)
+    switch (message.type) {
+        case "JOIN":
+            if (username !== message.sender) {
+                createUserNode(message.sender)
+            }
+            break
+        case "LEAVE":
+            removeUserByName(message.sender)
+            break
+        case "CHAT":
+            createMessageNode(message)
+            break
+    }
 }
 
-function createNode(message) {
-    let container = document.getElementById("messages")
-    if (message.type === "CHAT") {
-        let messageContainer = document.createElement("div")
-        messageContainer.classList.add("message-container")
+function createMessageNode(message) {
+    let messageContainer = document.createElement("div")
+    messageContainer.classList.add("message-container")
 
-        let messageHeader = document.createElement("div")
-        messageHeader.classList.add("message-header")
+    let messageHeader = document.createElement("div")
+    messageHeader.classList.add("message-header")
 
-        let senderTag = document.createElement("div")
-        senderTag.classList.add("sender")
-        senderTag.textContent = message.sender
-        messageHeader.appendChild(senderTag)
+    let senderTag = document.createElement("div")
+    senderTag.classList.add("sender")
+    senderTag.textContent = message.sender
+    messageHeader.appendChild(senderTag)
 
-        let createdAtTag = document.createElement("div")
-        createdAtTag.classList.add("date")
-        createdAtTag.textContent = message.createdAt
-        messageHeader.appendChild(createdAtTag)
+    let createdAtTag = document.createElement("div")
+    createdAtTag.classList.add("date")
+    createdAtTag.textContent = message.createdAt
+    messageHeader.appendChild(createdAtTag)
 
-        messageContainer.appendChild(messageHeader)
+    messageContainer.appendChild(messageHeader)
 
-        let messageTag = document.createElement("div")
-        messageTag.classList.add("message")
-        messageTag.textContent = message.content
-        messageContainer.appendChild(messageTag)
+    let messageTag = document.createElement("div")
+    messageTag.classList.add("message")
+    messageTag.textContent = message.content
+    messageContainer.appendChild(messageTag)
 
-        container.appendChild(messageContainer)
+    container.appendChild(messageContainer)
 
-        messageContainer.scrollIntoView({"behavior": "smooth"})
+    messageContainer.scrollIntoView({"behavior": "smooth"})
+}
+
+function createUserNode(user) {
+    let userTag = document.createElement("div")
+    userTag.classList.add("user")
+    userTag.textContent = user
+    users.appendChild(userTag)
+    let hrTag = document.createElement("hr")
+    userTag.appendChild(hrTag)
+}
+
+function removeUserByName(userName) {
+    let usersTag = users.getElementsByClassName("user");
+
+    for (let i = 0; i < usersTag.length; i++) {
+        if (usersTag[i].textContent === userName) {
+            usersTag[i].remove();  // Remove the user with matching text content
+            break;  // Stop once the user is found and removed
+        }
     }
 }
 
@@ -98,7 +130,19 @@ function fetchOldMessages() {
     fetch("api/messages/history")
         .then(responses => responses.json())
         .then(messages => {
-            messages.forEach(message => createNode(message))
+            messages.forEach(message => createMessageNode(message))
+        }).catch(err => console.log("Error when fetching message in Backend", err))
+}
+
+function fetchOnlineUsers() {
+    fetch("/api/users")
+        .then(responses => responses.json())
+        .then(users => {
+            users.forEach(onlineUser => {
+                if (onlineUser.username !== username) {
+                    createUserNode(onlineUser.username)
+                }
+            })
         })
 }
 
