@@ -9,7 +9,7 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 /**
  * @author Mack_TB
  * @since 01/09/2024
- * @version 1.0.4
+ * @version 1.0.7
  */
 
 @Configuration

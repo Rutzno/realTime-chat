@@ -7,7 +7,7 @@ import java.time.format.DateTimeFormatter;
 /**
  * @author Mack_TB
  * @since 01/09/2024
- * @version 1.0.5
+ * @version 1.0.7
  */
 
 public class ChatMessage {
@@ -15,8 +15,9 @@ public class ChatMessage {
     private String sender;
     private String content;
     private String createdAt;
+    private String recipient; // for private messaging
 
-    public enum MessageType {CHAT, JOIN, LEAVE}
+    public enum MessageType {CHAT, JOIN, LEAVE, PRIVATE_CHAT}
 
     public MessageType getType() {
         return type;
@@ -55,5 +56,13 @@ public class ChatMessage {
     public void setCreatedAt(LocalDateTime createdAt) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("hh:mm a | MMM dd");
         this.createdAt = createdAt.format(formatter);
+    }
+
+    public String getRecipient() {
+        return recipient;
+    }
+
+    public void setRecipient(String recipient) {
+        this.recipient = recipient;
     }
 }
