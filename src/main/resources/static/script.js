@@ -1,7 +1,7 @@
 /**
  * @author Mack_TB
  * @since 01/09/2024
- * @version 1.0.6
+ * @version 1.0.7
  */
 
 let usernamePage = document.getElementById("username-page")
@@ -33,6 +33,7 @@ function connect() {
 
 function onConnected() {
     stompClient.subscribe("/topic/public", onMessageReceived)
+    stompClient.subscribe(`/user/${username}/private`, onMessageReceived) // Subscribe to private messages
 
     // tell your username to the server
     stompClient.send("/app/chat.addUser", {},
@@ -62,6 +63,11 @@ function onMessageReceived(payload) {
             break
         case "CHAT":
             if (chatWith.textContent === "Public chat") {
+                createMessageNode(message)
+            }
+            break
+        case "PRIVATE_CHAT":
+            if (chatWith.textContent === message.sender || message.sender === username) {
                 createMessageNode(message)
             }
             break
@@ -116,10 +122,21 @@ function removeUserByName(userName) {
     }
 }
 
-function handleUserButton(username) {
+function handleUserButton(recipient) {
     publicChatBtn.classList.remove("primary")
-    chatWith.textContent = username
-    container.replaceChildren()
+    chatWith.textContent = recipient
+    container.replaceChildren() // Clear previous messages
+    currentChat = recipient // Store the recipient's username
+
+    fetchPrivateMessages(recipient)
+}
+
+function fetchPrivateMessages(recipient) {
+    fetch(`api/messages/private?sender=${username}&recipient=${recipient}`)
+        .then(response => response.json())
+        .then(messages => {
+            messages.forEach(message => createMessageNode(message))
+        }).catch(err => console.log("Error fetching private message in Backend", err))
 }
 
 function sendMessage() {
@@ -130,7 +147,8 @@ function sendMessage() {
             sender: username,
             content: messageContent,
             createdAt: new Date(),
-            type: "CHAT"
+            type: currentChat === "Public chat" ? "CHAT" : "PRIVATE_CHAT",
+            recipient: currentChat === "Public chat" ? null : currentChat
         }
         stompClient.send("/app/chat.sendMessage", {}, JSON.stringify(chatMessage))
         inputMsg.value = ""
@@ -162,5 +180,7 @@ sendMsgBtn.addEventListener("click",  sendMessage)
 publicChatBtn.addEventListener("click", () => {
     publicChatBtn.classList.add("primary")
     chatWith.textContent = "Public chat"
+    currentChat = "Public chat"
+    container.replaceChildren() // Clear previous messages
     fetchOldMessages()
 })
