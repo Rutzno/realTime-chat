@@ -1,7 +1,7 @@
 /**
  * @author Mack_TB
  * @since 01/09/2024
- * @version 1.0.7
+ * @version 1.0.8
  */
 
 let usernamePage = document.getElementById("username-page")
@@ -25,7 +25,7 @@ function connect() {
         usernamePage.classList.add("hidden")
         chatPage.classList.remove("hidden")
 
-        let socket = new SockJS("/ws")
+        let socket = new SockJS("http://localhost:28852/ws")
         stompClient = Stomp.over(socket)
         stompClient.connect({}, onConnected, onError)
     }
@@ -68,9 +68,63 @@ function onMessageReceived(payload) {
             break
         case "PRIVATE_CHAT":
             if (chatWith.textContent === message.sender || message.sender === username) {
+                let userContainer = getUserContainer(chatWith.textContent)
+                moveToTop(userContainer)
                 createMessageNode(message)
+            } else {
+                addNewMessageCounter(message.sender)
             }
             break
+    }
+}
+
+function getUserContainer(user) {
+    for (let i = 0; i < userButtons.length; i++) {
+        if (userButtons[i].textContent === user) {
+            return userButtons[i].parentNode
+        }
+    }
+}
+
+// remove the user-container and add it to the top
+function moveToTop(userContainer) {
+    let usersTag = userContainer.parentNode
+    if (usersTag.firstElementChild !== userContainer) {
+        usersTag.removeChild(userContainer)
+        usersTag.prepend(userContainer)
+    }
+}
+
+function addNewMessageCounter(user) {
+    let newMessageCounter = null
+    for (let i = 0; i < userButtons.length; i++) {
+        if (userButtons[i].textContent === user) {
+            let parentElement = userButtons[i].parentNode // user-container element
+            if (parentElement.children.length === 1) {
+                newMessageCounter = document.createElement("span")
+                newMessageCounter.classList.add("new-message-counter")
+                newMessageCounter.textContent = 1 + ""
+                parentElement.appendChild(newMessageCounter)
+            } else {
+                newMessageCounter = parentElement.lastElementChild
+                newMessageCounter.textContent = String(Number(newMessageCounter.textContent) + 1)
+            }
+            moveToTop(parentElement)
+            break;  // Stop once the user is found
+        }
+    }
+}
+
+function removeNewMessageCounter(user) {
+    for (let i = 0; i < userButtons.length; i++) {
+        if (userButtons[i].textContent === user) {
+            let parentElement = userButtons[i].parentNode
+            if (parentElement.children.length === 2) {
+                let newMessageCounter = parentElement.lastElementChild
+                newMessageCounter.remove()
+            }
+            break;
+        }
     }
 }
 
@@ -104,19 +158,24 @@ function createMessageNode(message) {
 }
 
 function createUserNode(user) {
-    let userButton = document.createElement("button")
-    userButton.classList.add("user")
-    userButton.textContent = user
-    users.appendChild(userButton)
+    let userContainer = document.createElement("button")
+    userContainer.classList.add("user-container")
+    let userTag = document.createElement("span")
+    userTag.classList.add("user")
+    userTag.textContent = user
+
+    userContainer.appendChild(userTag)
+    users.appendChild(userContainer)
     /*let hrTag = document.createElement("hr")
     userTag.appendChild(hrTag)*/
-    userButton.addEventListener("click", () => handleUserButton(user))
+    userContainer.addEventListener("click", () => handleUserButton(user))
 }
 
 function removeUserByName(userName) {
     for (let i = 0; i < userButtons.length; i++) {
         if (userButtons[i].textContent === userName) {
-            userButtons[i].remove();  // Remove the user with matching text content
+            let parentElement = userButtons[i].parentNode
+            parentElement.remove();  // Remove the user-container of this user
             break;  // Stop once the user is found and removed
         }
     }
@@ -129,6 +188,7 @@ function handleUserButton(recipient) {
     currentChat = recipient // Store the recipient's username
 
     fetchPrivateMessages(recipient)
+    removeNewMessageCounter(recipient)
 }
 
 function fetchPrivateMessages(recipient) {
