@@ -25,7 +25,7 @@ function connect() {
         usernamePage.classList.add("hidden")
         chatPage.classList.remove("hidden")
 
-        let socket = new SockJS("http://localhost:28852/ws")
+        let socket = new SockJS("http://localhost:8080/ws")
         stompClient = Stomp.over(socket)
         stompClient.connect({}, onConnected, onError)
     }
