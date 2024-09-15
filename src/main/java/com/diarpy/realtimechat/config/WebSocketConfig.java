@@ -9,7 +9,7 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 /**
  * @author Mack_TB
  * @since 01/09/2024
- * @version 1.0.7
+ * @version 1.0.8
  */
 
 @Configuration
@@ -18,7 +18,9 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/ws").withSockJS();
+        registry.addEndpoint("/ws")
+                .setAllowedOriginPatterns("*")
+                .withSockJS();
     }
 
     @Override
